@@ -255,7 +255,7 @@ function App() {
         </section>
       </main>
 
-      <footer className="footer">Personal Expense Tracker</footer>
+      <footer className="footer">Personal Expense Tracker.</footer>
     </div>
   );
 }
