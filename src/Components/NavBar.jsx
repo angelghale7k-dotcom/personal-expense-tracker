@@ -7,11 +7,11 @@ function Navbar({ theme, onToggleTheme }) {
         <div className="brand">
 
           <div className="brand-icon">
-            ₹
+            ET
           </div>
 
           <span>
-            ExpenseTrack
+            ExpenseTracker
           </span>
 
         </div>

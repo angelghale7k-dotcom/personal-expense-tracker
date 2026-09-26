@@ -50,15 +50,12 @@ function App() {
   const [sortOrder, setSortOrder] = useState("newest");
 
   const [theme, setTheme] = useState(
-    () => localStorage.getItem(THEME_KEY) || "light"
+    () => localStorage.getItem(THEME_KEY) || "light",
   );
 
   // Save transactions whenever transactions change
   useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(transactions)
-    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
   }, [transactions]);
 
   // Save budget
@@ -94,8 +91,8 @@ function App() {
   const deleteTransaction = (transactionId) => {
     setTransactions((currentTransactions) =>
       currentTransactions.filter(
-        (transaction) => transaction.id !== transactionId
-      )
+        (transaction) => transaction.id !== transactionId,
+      ),
     );
   };
 
@@ -109,8 +106,7 @@ function App() {
           summary.expenses += transaction.amount;
         }
 
-        summary.balance =
-          summary.income - summary.expenses;
+        summary.balance = summary.income - summary.expenses;
 
         return summary;
       },
@@ -118,7 +114,7 @@ function App() {
         income: 0,
         expenses: 0,
         balance: 0,
-      }
+      },
     );
   }, [transactions]);
 
@@ -128,8 +124,7 @@ function App() {
       filterCategory === "All"
         ? [...transactions]
         : transactions.filter(
-            (transaction) =>
-              transaction.category === filterCategory
+            (transaction) => transaction.category === filterCategory,
           );
 
     filtered.sort((a, b) => {
@@ -142,19 +137,14 @@ function App() {
     });
 
     return filtered;
-  }, [
-    transactions,
-    filterCategory,
-    sortOrder,
-  ]);
+  }, [transactions, filterCategory, sortOrder]);
 
   // Current month transactions
   const monthlyTransactions = useMemo(() => {
-    const currentMonth =
-      new Date().toISOString().slice(0, 7);
+    const currentMonth = new Date().toISOString().slice(0, 7);
 
     return transactions.filter((transaction) =>
-      transaction.date.startsWith(currentMonth)
+      transaction.date.startsWith(currentMonth),
     );
   }, [transactions]);
 
@@ -168,8 +158,7 @@ function App() {
           summary.expenses += transaction.amount;
         }
 
-        summary.balance =
-          summary.income - summary.expenses;
+        summary.balance = summary.income - summary.expenses;
 
         return summary;
       },
@@ -177,7 +166,7 @@ function App() {
         income: 0,
         expenses: 0,
         balance: 0,
-      }
+      },
     );
   }, [monthlyTransactions]);
 
@@ -187,39 +176,28 @@ function App() {
 
   return (
     <div className="app">
-
       <Navbar
         theme={theme}
         onToggleTheme={() =>
           setTheme((currentTheme) =>
-            currentTheme === "light"
-              ? "dark"
-              : "light"
+            currentTheme === "light" ? "dark" : "light",
           )
         }
       />
 
       <main className="container">
-
         {/* Hero */}
         <section className="hero">
-
           <div>
-            <p className="eyebrow">
-              PERSONAL FINANCE DASHBOARD
-            </p>
+            <p className="eyebrow">PERSONAL FINANCE DASHBOARD</p>
 
-            <h1>
-              Personal Expense Tracker
-            </h1>
+            <h1>Personal Expense Tracker</h1>
 
             <p className="subtitle">
-              Record your income and expenses,
-              understand your spending, and keep
-              your monthly finances organized.
+              Record your income and expenses, understand your spending, and
+              keep your monthly finances organized.
             </p>
           </div>
-
         </section>
 
         {/* Summary */}
@@ -231,91 +209,53 @@ function App() {
 
         {/* Main Dashboard */}
         <section className="dashboard-grid">
-
           {/* Left */}
-          <TransactionForm
-            onAddTransaction={addTransaction}
-          />
+          <TransactionForm onAddTransaction={addTransaction} />
 
           {/* Right */}
           <div className="side-column">
+            <ExpenseChart transactions={transactions} />
 
-            <ExpenseChart
-              transactions={transactions}
-            />
-
-            <MonthlySummary
-              totals={monthlyTotals}
-            />
+            <MonthlySummary totals={monthlyTotals} />
 
             <BudgetCard
               budget={budget}
-              monthlyExpenses={
-                monthlyTotals.expenses
-              }
-              onSaveBudget={
-                setMonthlyBudget
-              }
+              monthlyExpenses={monthlyTotals.expenses}
+              onSaveBudget={setMonthlyBudget}
             />
-
           </div>
-
         </section>
 
         {/* Transaction History */}
         <section className="history-section">
-
           <div className="section-heading">
-
             <div>
-              <p className="eyebrow">
-                ACTIVITY
-              </p>
+              <p className="eyebrow">ACTIVITY</p>
 
-              <h2>
-                Transaction History
-              </h2>
+              <h2>Transaction History</h2>
             </div>
 
             <span className="transaction-count">
               {filteredTransactions.length} transaction
-              {filteredTransactions.length !== 1
-                ? "s"
-                : ""}
+              {filteredTransactions.length !== 1 ? "s" : ""}
             </span>
-
           </div>
 
           <FilterBar
-            selectedCategory={
-              filterCategory
-            }
+            selectedCategory={filterCategory}
             sortOrder={sortOrder}
-            onCategoryChange={
-              setFilterCategory
-            }
-            onSortChange={
-              setSortOrder
-            }
+            onCategoryChange={setFilterCategory}
+            onSortChange={setSortOrder}
           />
 
           <TransactionList
-            transactions={
-              filteredTransactions
-            }
-            onDelete={
-              deleteTransaction
-            }
+            transactions={filteredTransactions}
+            onDelete={deleteTransaction}
           />
-
         </section>
-
       </main>
 
-      <footer className="footer">
-        Personal Expense Tracker • Built with React
-      </footer>
-
+      <footer className="footer">Personal Expense Tracker</footer>
     </div>
   );
 }
